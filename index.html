@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CipherX</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> <!-- FontAwesome library -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #071344, #000, #000, #000, #1c2f59, #3d0eb4);
+            background-position: top;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .title {
+            font-size: 1.5rem;
+            color: #fff;
+            text-align: center;
+            margin: 10px 0;
+            opacity: 0;
+            animation: dropDown 1.5s ease forwards, fadeIn 2s forwards;
+            background: linear-gradient(90deg, #000, #000);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            margin: 5px 0;
+            opacity: 0;
+            animation: fadeIn 2s 1.5s forwards;
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0);
+            border: 2px solid rgba(57, 57, 239, 0.719);
+            border-radius: 20px;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px; /* Set your desired maximum width */
+            box-shadow: 0 0 20px rgba(11, 11, 255, 0.795);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            color: #fff;
+            display: block;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            color: #00b7ff;
+            transition: box-shadow 0.3s ease, background 0.3s ease, glow 0.5s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            background: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 0 20px rgba(0, 0, 255, 0.7), 0 0 40px rgba(0, 0, 255, 0.7);
+            outline: none;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        button {
+            background-color: #3b02f78f;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        button:hover {
+            background-color: rgb(84, 61, 122);
+            box-shadow: 0 0 10px rgba(175, 175, 178, 0.7), 0 0 20px rgba(0, 0, 255, 0.7);
+        }
+
+        .result {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .result label {
+            font-size: 0.9rem;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        #result {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.906);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(194, 194, 197, 0.7), 0 0 20px rgba(0, 0, 255, 0.7);
+        }
+
+        .footer {
+            margin-top: 10px;
+        }
+
+        .footer button {
+            background-color: #dd00ffab;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .footer button:hover {
+            background-color: #dd00ffab;
+            box-shadow: 0 0 10px rgba(255, 254, 255, 0.735), 0 0 20px rgba(193, 185, 191, 0.7);
+        }
+
+        .copy-button {
+            background-color: #000;
+            color: #ccc;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 10px;
+            display: none;
+            align-self: center;
+        }
+
+        .copy-button:hover {
+            background-color: #333;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(255, 255, 255, 0.7);
+        }
+
+        .speak-button {
+            background-color: #000;
+            color: #ccc;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 10px;
+            display: none;
+            align-self: center;
+        }
+
+        .speak-button:hover {
+            background-color: #333;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(255, 255, 255, 0.7);
+        }
+
+        @keyframes dropDown {
+            from {
+                transform: translateY(-100px);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Fix for mobile screens */
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="title">CipherX</h1>
+    <h2 class="subtitle" style="font-weight: normal; font-size: 0.8rem; color: rgba(255, 255, 255, 0.6); text-align: center;">
+        Dive into the world of encryption with CipherX,<br>where you can encode and decode secret messages like a real spy.
+    </h2>
+
+    <div class="container">
+        <div class="form-group">
+            <label for="direction">Select operation:</label>
+            <select id="direction">
+                <option value="encode">Encrypt</option>
+                <option value="decode">Decrypt</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="message">Enter your message:</label>
+            <textarea id="message" placeholder="Enter your message"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="shift">Enter your code:</label>
+            <input type="number" id="shift" min="1" max="25" placeholder="Numbers" />
+        </div>
+        <div class="form-group">
+            <button onclick="processCipher()">Generate</button>
+        </div>
+        <div class="result">
+            <label for="result">Result:</label>
+            <div id="result"></div>
+            <button id="copyButton" class="copy-button" onclick="copyResult()">
+                <i class="fas fa-copy"></i> Copy
+            </button>
+            <button id="speakButton" class="speak-button" onclick="speakResult()">
+                <i class="fas fa-volume-up"></i> Speak
+            </button>
+        </div>
+        <div class="footer">
+            <button onclick="resetForm()">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        function caesar(text, shift, direction) {
+            const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const numbersAndSymbols = '0123456789!@#$%^&*()_+-=[]{}|;:",.<>?/';
+            let result = '';
+
+            for (let char of text) {
+                if (alphabet.includes(char)) {
+                    const isUpperCase = char === char.toUpperCase();
+                    const charSet = isUpperCase ? alphabet.slice(26) : alphabet.slice(0, 26);
+                    const position = charSet.indexOf(isUpperCase ? char : char.toLowerCase());
+                    let newPosition;
+
+                    if (direction === 'encode') {
+                        newPosition = (position + shift) % charSet.length;
+                    } else {
+                        newPosition = (position - shift + charSet.length) % charSet.length;
+                        if (newPosition < 0) {
+                            newPosition += charSet.length;
+                        }
+                    }
+
+                    const newChar = isUpperCase ? charSet[newPosition].toUpperCase() : charSet[newPosition].toLowerCase();
+                    result += newChar;
+                } else if (numbersAndSymbols.includes(char)) {
+                    const position = numbersAndSymbols.indexOf(char);
+                    let newPosition;
+
+                    if (direction === 'encode') {
+                        newPosition = (position + shift) % numbersAndSymbols.length;
+                    } else {
+                        newPosition = (position - shift + numbersAndSymbols.length) % numbersAndSymbols.length;
+                        if (newPosition < 0) {
+                            newPosition += numbersAndSymbols.length;
+                        }
+                    }
+
+                    const newChar = numbersAndSymbols[newPosition];
+                    result += newChar;
+                } else {
+                    result += char;
+                }
+            }
+            return result;
+        }
+
+        function processCipher() {
+            const direction = document.getElementById('direction').value;
+            const message = document.getElementById('message').value;
+            const shift = parseInt(document.getElementById('shift').value);
+            const resultElement = document.getElementById('result');
+            const copyButton = document.getElementById('copyButton');
+            const speakButton = document.getElementById('speakButton');
+
+            if (!isNaN(shift)) {
+                const result = caesar(message, shift, direction);
+                resultElement.innerText = result;
+
+                if (result) {
+                    copyButton.style.display = 'inline-block';
+                    speakButton.style.display = 'inline-block';
+                } else {
+                    copyButton.style.display = 'none';
+                    speakButton.style.display = 'none';
+                }
+            } else {
+                alert('Please enter a valid shift number.');
+            }
+        }
+
+        function copyResult() {
+            const resultText = document.getElementById('result').innerText;
+
+            if (resultText) {
+                const textarea = document.createElement('textarea');
+                textarea.value = resultText;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                alert('Result copied to clipboard!');
+            }
+        }
+
+        let synth = window.speechSynthesis;
+
+        function speakResult() {
+            const resultText = document.getElementById('result').innerText;
+
+            if (resultText) {
+                const utterance = new SpeechSynthesisUtterance(resultText);
+                synth.speak(utterance);
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('direction').value = 'encode';
+            document.getElementById('message').value = '';
+            document.getElementById('shift').value = '';
+            document.getElementById('result').innerText = '';
+            document.getElementById('copyButton').style.display = 'none';
+            document.getElementById('speakButton').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
